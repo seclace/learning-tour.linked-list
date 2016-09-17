@@ -1,77 +1,65 @@
-﻿namespace Learning_tour.linked_lists
-{
-    class LinkedList
-    {
+﻿namespace Learning_tour.linked_lists {
+    class LinkedList {
         node beginNode;
         node endNode;
 
         public int count { get; private set; }
 
-        public node this[int i]
-        {
-            get { return getNodeByIndex(i); }
+        public node this[int i] {
+            get { return get(i); }
         }
 
-        public LinkedList()
-        {
+        public LinkedList() {
             count = 0;
         }
 
-        public node getNodeByIndex(int index)
-        {
+        public node get(int index) {
             node n = beginNode;
-            while (index-- > 0)
-            {
-                if (n.getNextNode() == null) break;
-                else n = n.getNextNode();
+            while (index-- > 0) {
+                if (n.next == null) break;
+                else n = n.next;
             }
             return n;
         }
 
-        public node getFirstNode()
-        {
+        public node getFirstNode() {
             return beginNode;
         }
 
-        public node getLastNode()
-        {
+        public node getLastNode() {
             return endNode;
         }
 
-        public void addNode(object input)
-        {
+        public void add(object input) {
             if (beginNode == null) {
                 beginNode = new node(input);
                 endNode = beginNode;
-            }
-            else
-            {
+            } else {
                 node tmp = new node(input);
-                endNode.setNextNode(tmp);
-                tmp.setPrevNode(endNode);
+                endNode.next = tmp;
+                tmp.prev = endNode;
                 endNode = tmp;
             }
             count++;
         }
 
-        public void addNodeByIndex(object input, int index)
-        {
-            node n = getNodeByIndex(index), 
-                nPrev = n.getPrevNode();
+        public void add(object input, int index) {
+            node n = get(index),
+                nPrev = n.prev;
             node newNode = new node(input);
-            nPrev.setNextNode(newNode);
-            n.setPrevNode(newNode);
-            newNode.setPrevAndNextNodes(nPrev, n);
+            nPrev.next = newNode;
+            n.prev = newNode;
+            newNode.prev = nPrev;
+            newNode.next = n;
             count++;
         }
 
-        public void removeNodeByIndex(int index)
-        {
-            node n = getNodeByIndex(index),
-                nPrev = n.getPrevNode(),
-                nNext = n.getNextNode();
-            if (nPrev != null) nPrev.setNextNode(nNext);
-            if (nNext != null) nNext.setPrevNode(nPrev);
+        public void remove(int index) {
+            node n = get(index);
+            node nPrev = n.prev;
+            node nNext = n.next;
+            if (nPrev != null) nPrev.next = nNext;
+            if (nNext != null) nNext.prev = nPrev;
             if (index == 0) beginNode = nNext;
             else if (index == count) endNode = nPrev;
             count = count > 0 ? count - 1 : 0;
